@@ -1,5 +1,3 @@
-import { message } from "antd"
-
 interface ConversationItemProps{
     messageType?:"voice"|"message"
     isTyping?:boolean,
