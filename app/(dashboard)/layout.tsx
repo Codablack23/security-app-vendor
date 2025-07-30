@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
 import "bootstrap-icons/font/bootstrap-icons.css"
-import { AuthLayout } from "../components";
+import { AuthLayout } from "../shared";
 
 // Load Inter without variable (just className)
 const inter = Inter({

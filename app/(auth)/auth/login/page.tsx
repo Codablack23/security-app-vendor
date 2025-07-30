@@ -1,6 +1,6 @@
 "use client";
 
-import { CustomSpinner } from "@/app/components";
+import { CustomSpinner } from "@/app/shared";
 import { useLogin } from "@/hooks";
 import { message, notification } from "antd";
 import Link from "next/link";
