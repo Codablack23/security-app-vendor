@@ -12,33 +12,30 @@ export interface AuthUser {
     status: string;
     createdAt: string;
     updatedAt: string;
+    vendor:VendorProfile,
     __v: number;
-    pss?: {
-        _id: string;
-        user: string;
-        zone: string;
-        camp: string;
-        team: string;
-        securityContact: {
-            _id: string;
-        };
-        pmsHistory: {
-            totalVolume: number;
-            suppliesReceived: number;
-            _id: string;
-        };
-        createdAt: string;
-        updatedAt: string;
-        __v: number;
-    };
+}
+
+export interface VendorProfile {
+    user: string; // User ID reference
+    company_name: string;
+    address: string;
+    secondary_phone: string;
+    secondary_email: string;
+    logo: string; // URL to the logo image
+    _id: string;
+    createdAt: string; // ISO date string
+    updatedAt: string; // ISO date string
+    __v: number;
 }
 
 interface LoginResponse {
     access_token: string;
     user: AuthUser;
+    vendor: VendorProfile
 }
 
 
 export type AuthResponse = BaseApiResponse<LoginResponse>
 
-export type AuthLoginResponse = AuthResponse & { status:"success" | "failed" }
+export type AuthLoginResponse = AuthResponse & { status: "success" | "failed" }

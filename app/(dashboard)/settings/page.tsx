@@ -1,4 +1,3 @@
-import Image from "next/image";
 import DashboardLayout from "../DashboardLayout";
 import { SettingsForm } from "../components";
 

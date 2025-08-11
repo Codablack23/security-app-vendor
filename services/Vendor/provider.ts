@@ -3,13 +3,13 @@ import { BASE_URL, SUCCESS_STATUS_CODES } from "../config";
 import { BaseApiResponse } from "@/types";
 import { Serializer } from "@/utils";
 import { defaultAuth } from "../../hooks/useAuth";
-import { PmsStatsResponse, PmsStatsApiResponse, PmsSupplyApiResponse, PmsSupplyResponse, SupplyData } from "./types";
+import { PmsStatsResponse, PmsStatsApiResponse, PmsSupplyApiResponse, PmsSupplyResponse, UpdateVendorRequestData } from './types';
 
-export class PmSProvider {
-    private static endpoint = `${BASE_URL}/pms-supply`;
+export class VendorProvider {
+    private static endpoint = `${BASE_URL}/vendors`;
 
     private static instance: AxiosInstance = axios.create({
-        baseURL: PmSProvider.endpoint,
+        baseURL: this.endpoint,
     });
 
     // ✅ Attach token automatically before every request
@@ -24,13 +24,11 @@ export class PmSProvider {
         });
     }
 
-    static async getVendorStats(period?: "day" | "week" | "month" | "year") {
+    static async getVendorProfile(id:string) {
         try {
-            this.initialize(); // 🔁 Ensure interceptors are set (call once or guard against multiple calls)
-
-            const res = await this.instance.get<PmsStatsApiResponse>(
-                `/vendor/stats${period ? `?period=${period}` : ""}`
-            );
+            this.initialize();
+             // 🔁 Ensure interceptors are set (call once or guard against multiple calls)
+            const res = await this.instance.get<PmsStatsApiResponse>(id);
 
             if (!SUCCESS_STATUS_CODES.includes(res.data.statusCode))
                 throw new Error(res.data.message);
@@ -49,15 +47,15 @@ export class PmSProvider {
                 message:
                     errResponse?.message ??
                     err.message ??
-                    "An error occurred, could not fetch stats",
+                    "An error occurred, could not fetch vendor profile",
             } as PmsStatsResponse;
         }
     }
-    static async getSupply() {
+    static async updateVendor(id:string,updatedProfile:UpdateVendorRequestData) {
         try {
-            this.initialize(); // 🔁 Ensure interceptors are set (call once or guard against multiple calls)
-
-            const res = await this.instance.get<PmsSupplyApiResponse>("");
+            this.initialize();
+             // 🔁 Ensure interceptors are set (call once or guard against multiple calls)
+            const res = await this.instance.patch<BaseApiResponse>(id,updatedProfile);
 
             if (!SUCCESS_STATUS_CODES.includes(res.data.statusCode))
                 throw new Error(res.data.message);
@@ -65,7 +63,7 @@ export class PmSProvider {
             return {
                 status: "success",
                 ...res.data,
-            } as PmsSupplyResponse;
+            } as PmsStatsResponse;
         } catch (error) {
             const err = error as AxiosError<BaseApiResponse>;
             const errResponse = err.response?.data;
@@ -76,35 +74,8 @@ export class PmSProvider {
                 message:
                     errResponse?.message ??
                     err.message ??
-                    "An error occurred, could not fetch stats",
-            } as PmsSupplyResponse;
-        }
-    }
-    static async getSupplyDetails(id:string) {
-        try {
-            this.initialize(); // 🔁 Ensure interceptors are set (call once or guard against multiple calls)
-
-            const res = await this.instance.get<BaseApiResponse<SupplyData>>(id);
-
-            if (!SUCCESS_STATUS_CODES.includes(res.data.statusCode))
-                throw new Error(res.data.message);
-
-            return {
-                status: "success",
-                ...res.data,
-            } as BaseApiResponse<SupplyData>;
-        } catch (error) {
-            const err = error as AxiosError<BaseApiResponse>;
-            const errResponse = err.response?.data;
-
-            return {
-                status: "failed",
-                statusCode: 500,
-                message:
-                    errResponse?.message ??
-                    err.message ??
-                    "An error occurred, could not fetch stats",
-            } as BaseApiResponse<SupplyData>
+                    "An error occurred, could not fetch vendor profile",
+            } as BaseApiResponse;
         }
     }
 }

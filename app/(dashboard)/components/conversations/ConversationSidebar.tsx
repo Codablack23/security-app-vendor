@@ -2,6 +2,7 @@
 
 import { ButtonHTMLAttributes, useState } from "react"
 import ConversationList from "./ConversationList";
+import { useConversation } from "@/hooks";
 
 interface ConversationTypeButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
     isActive?:boolean
@@ -20,6 +21,8 @@ function ConversationTypeButton({isActive,className,children,...btnProps}:Conver
 }
 
 export default function ConversationSidebar(){
+
+    const {} = useConversation()
 
     const [conversationType,setConversationType] = useState<"chats"|"calls">("chats")
     const [userType,setUserType] = useState("")

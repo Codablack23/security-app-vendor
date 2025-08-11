@@ -59,3 +59,49 @@ export function useGetPmsSupply(
         refetch: getPmsStats,
     };
 }
+
+
+interface UseGetPmsSupplyOptions {
+    staleTime?: number; // Duration (in ms) after which data is considered stale
+}
+
+interface UseGetPMSSupplyDetailsOptions{
+   onError?:(error?:unknown)=>void,
+   enabled?:boolean
+}
+
+export function useGetPMSSupplyDetails(id:string,{enabled=true,onError}:UseGetPMSSupplyDetailsOptions){
+    const [loading,setLoading] = useState(true)
+    const [supplyDetails,setSupplyDetails] = useState<SupplyData | null>(null)
+
+
+    const getSupplyDetails = useCallback(async()=>{
+
+        if(enabled) return;
+
+        setLoading(true)
+        try{
+            if(!id) throw new Error("Please provide a valid supply Id");
+            const res = await PmSProvider.getSupplyDetails(id)
+            if(res.status != "success") throw new Error(res.message);
+            if(!res.data) throw new Error(res.message ?? "An Error occured could not get supply details")
+            setSupplyDetails(res.data)
+        }
+        catch(err){
+            onError?.(err)
+        }
+        finally{
+            setLoading(false)
+        }
+    },[enabled])
+
+    useEffect(()=>{
+        getSupplyDetails()
+    },[getSupplyDetails])
+
+    return {
+        loading,
+        supplyDetails,
+        refetch:getSupplyDetails,
+    }
+}

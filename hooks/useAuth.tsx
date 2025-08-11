@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from 'react';
 import { AuthUser } from "@/services/Auth";
 import { Serializer } from "@/utils";
 

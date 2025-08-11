@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link"
 import { ReactNode } from "react"
 import { BellIcon, CallIcon, HomeIcon, LogoutIcon, SettingsIcon } from '../icons/';
+import { useAuthContext } from "@/contexts/Auth";
 
 interface DashboardLayoutProps {
     children: ReactNode,
@@ -35,6 +38,10 @@ function LinkButton(props: LinkButtonProps) {
 }
 
 export default function DashboardLayout({ activePage = "home", ...props }: DashboardLayoutProps) {
+
+    const {auth} = useAuthContext()
+
+
     return (
         <main>
             <aside className="fixed left-0 px-[10px] top-0 w-[250px] bg-white pt-[155px] h-full">
@@ -82,8 +89,10 @@ export default function DashboardLayout({ activePage = "home", ...props }: Dashb
                 <header className="bg-white sticky top-0 h-[80px] flex justify-between items-center p-5 pr-[50px]">
                     <p className="text-3xl font-semibold text-[rgba(16,24,40,1)]">Welcome, David</p>
                     <div className="flex items-center gap-x-4">
-                        <button className=""><BellIcon/></button>
-                        <button className="h-[50px] w-[50px] rounded-full bg-gray-400"></button>
+                        <button className=""><BellIcon height={36} width={36}/></button>
+                        <button className="h-[36px] w-[36px] rounded-full bg-gray-400">
+                            <img src={auth.user?.avatar} className="h-9 w-9 rounded-full" alt="" />
+                        </button>
                     </div>
                 </header>
                 <div className="p-8">

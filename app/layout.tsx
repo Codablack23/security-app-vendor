@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import "bootstrap-icons/font/bootstrap-icons.css"
 import { AuthContextProvider } from "@/contexts/Auth";
+import { App } from "antd";
 
 // Load Inter without variable (just className)
 const inter = Inter({
@@ -24,9 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} text-[#212121] bg-[#F9F9F9] antialiased`}>
-        <AuthContextProvider>
-          {children}
-        </AuthContextProvider>
+        <App>
+          <AuthContextProvider>
+            {children}
+          </AuthContextProvider>
+        </App>
       </body>
     </html>
   );
